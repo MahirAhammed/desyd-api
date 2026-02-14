@@ -40,7 +40,8 @@ spring-boot-*.log
 .env
 .env.local
 .env.*.local
-application.yaml
+application-local.yml
+
 
 *.sql.gz
 *.dump
