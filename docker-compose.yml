@@ -1,0 +1,21 @@
+services:
+    postgres:
+        image: postgres:17-alpine
+        container_name: desyd-postgres
+        environment:
+            POSTGRES_DB: desyd
+            POSTGRES_USER: desyd_user
+            POSTGRES_PASSWORD: desyd14Ch@racter
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U desyd_user -d desyd"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        restart: unless-stopped
+
+volumes:
+  postgres_data:
