@@ -1,0 +1,1 @@
+ALTER TABLE sessions DROP CONSTRAINT sessions_created_by_key;
