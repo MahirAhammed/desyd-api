@@ -1,5 +1,6 @@
 package com.desyd.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
@@ -32,6 +33,7 @@ public class User {
     private OffsetDateTime updatedAt;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private UserProfile userProfile;
 
     public User() {}
