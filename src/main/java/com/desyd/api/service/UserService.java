@@ -5,6 +5,9 @@ import com.desyd.api.dto.request.RegisterRequestDTO;
 import com.desyd.api.dto.response.UserProfileResponse;
 import com.desyd.api.entity.User;
 import com.desyd.api.entity.UserProfile;
+import com.desyd.api.exception.DuplicateResourceException;
+import com.desyd.api.exception.ResourceNotFoundException;
+import com.desyd.api.exception.ValidationException;
 import com.desyd.api.repository.UserProfileRepository;
 import com.desyd.api.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -31,11 +34,11 @@ public class UserService {
     public UserProfileResponse register(RegisterRequestDTO request){
 
         if (userRepository.existsByEmail(request.getEmail())){
-            throw new RuntimeException("Email already registered");
+            throw new DuplicateResourceException("User", "email", request.getEmail());
         }
 
         if (userProfileRepository.existsByUsername(request.getUsername())){
-            throw new RuntimeException("Username already exists");
+            throw new DuplicateResourceException("User", "email", request.getUsername());
         }
 
         User user = createUser(request);
@@ -48,18 +51,18 @@ public class UserService {
     public UserProfileResponse login(LoginRequestDTO request){
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .orElseThrow(() -> new ValidationException("Invalid email or password", "INVALID_CREDENTIALS"));
 
         if (!user.getActive()){
             throw new RuntimeException("Account is deactivated");
         }
 
         if(!encoder.matches(request.getPassword(), user.getPasswordHash())){
-            throw new RuntimeException("Invalid email or password");
+            throw new ValidationException("Invalid email or password", "INVALID_CREDENTIALS");
         }
 
         UserProfile profile = userProfileRepository.findById(user.getId())
-                .orElseThrow(() -> new RuntimeException("Profile not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Profile"));
 
         return toUserProfileResponse(profile);
     }
