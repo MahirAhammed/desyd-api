@@ -38,4 +38,12 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(e.getErrorCode(), e.getMessage());
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ErrorResponse handleAuthenticationException(AuthenticationException e){
+        logger.warn("Authentication failed: {}", e.getMessage());
+        return new ErrorResponse(e.getErrorCode(), e.getMessage());
+    }
+
 }
