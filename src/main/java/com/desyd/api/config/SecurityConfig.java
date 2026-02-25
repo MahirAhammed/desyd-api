@@ -47,10 +47,10 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("api/v1/users/register").permitAll()
-                                .requestMatchers("/api/users/login").permitAll()
-                                .requestMatchers("/api/users/refresh").permitAll()
-                                .requestMatchers("/api/ping").permitAll()
+                                .requestMatchers("/api/v1/users/register").permitAll()
+                                .requestMatchers("/api/v1/users/login").permitAll()
+                                .requestMatchers("/api/v1/users/refresh").permitAll()
+                                .requestMatchers("/api/v1/ping").permitAll()
                                 // All other endpoints require authentication
                                 .anyRequest().authenticated()
 
