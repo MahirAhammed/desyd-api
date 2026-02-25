@@ -11,6 +11,6 @@ import java.util.UUID;
 public interface UserProfileRepository extends JpaRepository<UserProfile, UUID> {
 
     Optional<UserProfile> findByUsername(String username);
-    boolean existsByUsername(String username);
+    boolean existsByUsername(String username); // TODO: username exists case insensitive and only differs by 2 characters
 
 }
