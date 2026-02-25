@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class RegisterRequestDTO {
+public class RegisterRequest {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email must be valid")
@@ -24,7 +24,7 @@ public class RegisterRequestDTO {
     )
     private String password;
 
-    public RegisterRequestDTO() {}
+    public RegisterRequest() {}
 
     public String getEmail() {
         return email;

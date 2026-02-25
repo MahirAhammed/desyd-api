@@ -2,7 +2,7 @@ package com.desyd.api.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class LoginRequestDTO {
+public class LoginRequest {
 
     @NotBlank(message = "Email is required")
     private String email;
@@ -11,10 +11,9 @@ public class LoginRequestDTO {
     private String password;
 
     // Constructors
-    public LoginRequestDTO() {
-    }
+    public LoginRequest() {}
 
-    public LoginRequestDTO(String email, String password) {
+    public LoginRequest(String email, String password){
         this.email = email;
         this.password = password;
     }

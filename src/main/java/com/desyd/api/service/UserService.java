@@ -153,6 +153,12 @@ public class UserService {
         }
     }
 
+    public UserProfileResponse getUserProfile(UUID userId) {
+        UserProfile profile = userProfileRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", userId.toString()));
+        return toUserProfileResponse(profile);
+    }
+
     public void logout(UUID id){
         userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User", id.toString()));
@@ -188,4 +194,5 @@ public class UserService {
         response.setSessionsHosted(profile.getSessionsHosted());
         return response;
     }
+
 }
