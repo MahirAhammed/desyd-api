@@ -83,7 +83,7 @@ public class UserService {
 
             // Successful login
             User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User", request.getEmail()));
+                    .orElseThrow(() -> new ResourceNotFoundException("User", request.getEmail()));
 
             if (!user.getActive()){
                 throw new ValidationException("Account is deactivated", "ACCOUNT_DEACTIVATED");
@@ -103,8 +103,6 @@ public class UserService {
                     jwtExpiration,
                     toUserProfileResponse(profile)
             );
-
-
         } catch (AuthenticationException e) {
             logger.warn("Login failed for email: {}", request.getEmail());
             throw new ValidationException("Invalid email or password", "INVALID_CREDENTIALS");
