@@ -2,7 +2,6 @@ package com.desyd.api.dto.request;
 
 import com.desyd.api.enums.SessionCategory;
 import com.desyd.api.enums.VotingMode;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 import java.util.*;
@@ -34,7 +33,7 @@ public class CreateSessionRequest {
     @Max(value = 1440, message = "Time limit cannot exceed 24 hours")
     private Integer duration;
 
-    @Valid
+    @NotNull(message = "Options are required")
     @Size(min = 2, max = 20, message = "Must provide between 2 and 20 options")
     private List<String> options = new ArrayList<>();
 

@@ -50,7 +50,7 @@ public class Session {
     private Boolean showLiveResults = true;
 
     @Column(name = "duration")
-    private Integer duration = 600;
+    private Integer duration = 10;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
@@ -59,6 +59,7 @@ public class Session {
     private OffsetDateTime closedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by")
     private User createdBy;
 
     // One-to-many relationship with SessionOption
