@@ -4,6 +4,8 @@ import com.desyd.api.enums.SessionCategory;
 import com.desyd.api.enums.SessionStatus;
 import com.desyd.api.enums.VotingMode;
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.dialect.type.PostgreSQLEnumJdbcType;
 
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -26,14 +28,17 @@ public class Session {
     private String description;
 
     @Enumerated(EnumType.STRING)
+    @JdbcType(value = PostgreSQLEnumJdbcType.class)
     @Column(name = "category", nullable = false, columnDefinition = "session_category")
     private SessionCategory category;
 
     @Enumerated(EnumType.STRING)
+    @JdbcType(value = PostgreSQLEnumJdbcType.class)
     @Column(name = "voting_mode", nullable = false, columnDefinition = "vote_mode")
     private VotingMode votingMode;
 
     @Enumerated(EnumType.STRING)
+    @JdbcType(value = PostgreSQLEnumJdbcType.class)
     @Column(name = "status", nullable = false, columnDefinition = "session_status")
     private SessionStatus status = SessionStatus.ACTIVE;
 
