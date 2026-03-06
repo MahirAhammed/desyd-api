@@ -3,10 +3,7 @@ package com.desyd.api.service;
 import com.desyd.api.dto.request.CreateSessionRequest;
 import com.desyd.api.dto.response.OptionResponse;
 import com.desyd.api.dto.response.SessionResponse;
-import com.desyd.api.entity.Session;
-import com.desyd.api.entity.SessionOption;
-import com.desyd.api.entity.SessionParticipant;
-import com.desyd.api.entity.User;
+import com.desyd.api.entity.*;
 import com.desyd.api.enums.SessionStatus;
 import com.desyd.api.exception.ConflictException;
 import com.desyd.api.exception.ResourceNotFoundException;
@@ -196,9 +193,11 @@ public class SessionService {
 
     private void addParticipant(Session session, User user) {
         SessionParticipant participant = new SessionParticipant();
+        participant.setId(new SessionParticipantId(session.getId(), user.getId()));
         participant.setSession(session);
         participant.setUser(user);
         participant.setHasVoted(false);
+        participant.setJoinedAt(OffsetDateTime.now());
         sessionParticipantRepository.save(participant);
     }
 
@@ -213,7 +212,7 @@ public class SessionService {
         response.setVoteMode(session.getVotingMode());
         response.setStatus(session.getStatus());
         response.setMaxParticipants(session.getMaxParticipants());
-        response.setCurrentParticipantCount((int) sessionParticipantRepository.countBySessionId(session.getId()));
+        response.setCurrentParticipantCount(sessionParticipantRepository.countBySessionId(session.getId()));
         response.setAllowParticipantOptions(session.getAllowParticipantOptions());
         response.setAnonymousVoting(session.getAnonymousVoting());
         response.setShowLiveResults(session.getShowLiveResults());

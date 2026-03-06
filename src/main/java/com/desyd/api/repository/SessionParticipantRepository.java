@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface SessionParticipantRepository extends JpaRepository<SessionParticipant, UUID> {
 
     boolean existsBySessionIdAndUserId(UUID sessionId, UUID userId);
-    long countBySessionId(UUID sessionId);
+    int countBySessionId(UUID sessionId);
     Optional<SessionParticipant> findBySessionIdAndUserId(UUID sessionId, UUID userId);
     List<SessionParticipant> findByUserId(UUID userId);
 }

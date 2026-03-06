@@ -19,7 +19,7 @@ public class CreateSessionRequest {
     private SessionCategory category;
 
     @NotNull(message = "Voting mode is required")
-    private VotingMode votingMode;
+    private VotingMode votingMode = VotingMode.DEFAULT;
 
     @Min(value = 2, message = "Minimum 2 participants required")
     @Max(value = 30, message = "Maximum participants cannot exceed 30")
