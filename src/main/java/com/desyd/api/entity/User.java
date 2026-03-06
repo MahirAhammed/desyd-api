@@ -125,12 +125,12 @@ public class User {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(passwordHash, user.passwordHash) && Objects.equals(emailVerified, user.emailVerified) && Objects.equals(isActive, user.isActive) && Objects.equals(createdAt, user.createdAt) && Objects.equals(updatedAt, user.updatedAt) && Objects.equals(userProfile, user.userProfile);
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, passwordHash, emailVerified, isActive, createdAt, updatedAt, userProfile);
+        return Objects.hash(id, email);
     }
 
     @Override

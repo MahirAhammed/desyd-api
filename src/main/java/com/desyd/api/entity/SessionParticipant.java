@@ -1,5 +1,6 @@
 package com.desyd.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
@@ -8,17 +9,21 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "session_participants")
-@IdClass(SessionParticipantId.class)
 public class SessionParticipant {
 
-    @Id
+    @EmbeddedId
+    private SessionParticipantId id;
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("sessionId")
     @JoinColumn(name = "session_id", nullable = false)
+    @JsonIgnore
     private Session session;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "session_id", nullable = false)
+    @MapsId("userId")
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @Column(name = "has_voted", nullable = false)
@@ -39,6 +44,10 @@ public class SessionParticipant {
     protected void onCreate() {
         this.joinedAt = OffsetDateTime.now();
     }
+
+    public SessionParticipantId getId() {return id;}
+
+    public void setId(SessionParticipantId id) {this.id = id;}
 
     public Session getSession() {
         return session;

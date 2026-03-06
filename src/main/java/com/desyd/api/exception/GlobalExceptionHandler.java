@@ -46,4 +46,21 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(e.getErrorCode(), e.getMessage());
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseBody
+    public ErrorResponse handleUnauthorizedException(UnauthorizedException e){
+        logger.warn("User unauthorized: {}", e.getMessage());
+        return new ErrorResponse(e.getErrorCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseBody
+    public ErrorResponse handleConflictException(ConflictException e){
+        logger.warn("Alredy exists: {}", e.getMessage());
+        return new ErrorResponse(e.getErrorCode(), e.getMessage());
+    }
+
+
 }

@@ -106,12 +106,12 @@ public class UserProfile {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         UserProfile that = (UserProfile) o;
-        return Objects.equals(user, that.user) && Objects.equals(username, that.username) && Objects.equals(sessionsJoined, that.sessionsJoined) && Objects.equals(sessionsHosted, that.sessionsHosted) && Objects.equals(createdAt, that.createdAt) && Objects.equals(updatedAt, that.updatedAt);
+        return Objects.equals(userId, that.userId) && Objects.equals(username, that.username);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, username, sessionsJoined, sessionsHosted, createdAt, updatedAt);
+        return Objects.hash(userId);
     }
 
     @Override
