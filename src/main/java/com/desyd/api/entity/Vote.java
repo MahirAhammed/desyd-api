@@ -120,12 +120,12 @@ public class Vote {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Vote vote = (Vote) o;
-        return Objects.equals(id, vote.id) && Objects.equals(voteValue, vote.voteValue) && Objects.equals(isVeto, vote.isVeto) && Objects.equals(createdAt, vote.createdAt) && Objects.equals(session, vote.session) && Objects.equals(user, vote.user) && Objects.equals(option, vote.option);
+        return Objects.equals(id, vote.id) && Objects.equals(voteValue, vote.voteValue);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, voteValue, isVeto, createdAt, session, user, option);
+        return Objects.hash(id, voteValue);
     }
 
     @Override

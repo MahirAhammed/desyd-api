@@ -85,12 +85,12 @@ public class SessionParticipant {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         SessionParticipant that = (SessionParticipant) o;
-        return Objects.equals(session, that.session) && Objects.equals(user, that.user) && Objects.equals(hasVoted, that.hasVoted) && Objects.equals(joinedAt, that.joinedAt);
+        return Objects.equals(session.getId(), that.session.getId()) && Objects.equals(user.getId(), that.user.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(session, user, hasVoted, joinedAt);
+        return Objects.hash(session.getId(), user.getId());
     }
 
     @Override

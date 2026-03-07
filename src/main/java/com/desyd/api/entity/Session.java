@@ -259,12 +259,12 @@ public class Session {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Session session = (Session) o;
-        return Objects.equals(id, session.id) && Objects.equals(sessionCode, session.sessionCode) && Objects.equals(title, session.title) && Objects.equals(description, session.description) && category == session.category && votingMode == session.votingMode && status == session.status && Objects.equals(maxParticipants, session.maxParticipants) && Objects.equals(allowParticipantOptions, session.allowParticipantOptions) && Objects.equals(anonymousVoting, session.anonymousVoting) && Objects.equals(showLiveResults, session.showLiveResults) && Objects.equals(duration, session.duration) && Objects.equals(createdAt, session.createdAt) && Objects.equals(closedAt, session.closedAt) && Objects.equals(createdBy, session.createdBy);
+        return Objects.equals(id, session.id) && Objects.equals(sessionCode, session.sessionCode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, sessionCode, title, description, category, votingMode, status, maxParticipants, allowParticipantOptions, anonymousVoting, showLiveResults, duration, createdAt, closedAt, createdBy);
+        return Objects.hash(id, sessionCode);
     }
 
     @Override

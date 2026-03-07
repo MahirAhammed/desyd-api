@@ -120,12 +120,12 @@ public class SessionResult {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         SessionResult that = (SessionResult) o;
-        return Objects.equals(sessionId, that.sessionId) && Objects.equals(session, that.session) && Objects.equals(winnerOption, that.winnerOption) && Objects.equals(winnerOptionText, that.winnerOptionText) && Objects.equals(winnerScore, that.winnerScore) && Objects.equals(fullResults, that.fullResults) && Objects.equals(totalVotesCast, that.totalVotesCast) && Objects.equals(totalParticipants, that.totalParticipants);
+        return Objects.equals(sessionId, that.sessionId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sessionId, session, winnerOption, winnerOptionText, winnerScore, fullResults, totalVotesCast, totalParticipants);
+        return Objects.hash(sessionId);
     }
 
     @Override

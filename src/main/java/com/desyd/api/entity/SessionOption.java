@@ -100,12 +100,12 @@ public class SessionOption {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         SessionOption that = (SessionOption) o;
-        return Objects.equals(id, that.id) && Objects.equals(session, that.session) && Objects.equals(createdBy, that.createdBy) && Objects.equals(optionText, that.optionText) && Objects.equals(metadata, that.metadata) && Objects.equals(createdAt, that.createdAt);
+        return Objects.equals(id, that.id) && Objects.equals(session.getId(), that.session.getId()) && Objects.equals(createdBy.getId(), that.createdBy.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, session, createdBy, optionText, metadata, createdAt);
+        return Objects.hash(id, session.getId(), createdBy.getId());
     }
 
     @Override
