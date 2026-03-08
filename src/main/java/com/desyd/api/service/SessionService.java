@@ -11,10 +11,10 @@ import com.desyd.api.exception.UnauthorizedException;
 import com.desyd.api.exception.ValidationException;
 import com.desyd.api.repository.*;
 import com.desyd.api.util.SessionCodeGenerator;
-import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.List;
