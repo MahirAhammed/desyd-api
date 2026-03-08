@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ResponseBody
     public ErrorResponse handleConflictException(ConflictException e){
-        logger.warn("Alredy exists: {}", e.getMessage());
+        logger.warn("Already exists: {}", e.getMessage());
         return new ErrorResponse(e.getErrorCode(), e.getMessage());
     }
 

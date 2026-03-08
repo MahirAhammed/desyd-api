@@ -81,6 +81,10 @@ public class SessionParticipant {
         this.joinedAt = joinedAt;
     }
 
+    public void markVoted(){ this.hasVoted = true; }
+
+    public void resetVote() { this.hasVoted = false; }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
