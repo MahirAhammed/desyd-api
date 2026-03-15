@@ -10,6 +10,7 @@ import java.util.UUID;
 @Repository
 public interface VoteRepository extends JpaRepository<Vote, UUID> {
 
+    List<Vote> findBySessionId(UUID sessionId);
     List<Vote> findBySessionIdAndUserId(UUID sessionId, UUID userId);
     void deleteBySessionIdAndUserId(UUID sessionId, UUID userId);
 }
