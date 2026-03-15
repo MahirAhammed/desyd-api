@@ -2,7 +2,9 @@ package com.desyd.api.controller;
 
 import com.desyd.api.dto.request.CreateSessionRequest;
 import com.desyd.api.dto.request.JoinSessionRequest;
+import com.desyd.api.dto.response.ResultResponse;
 import com.desyd.api.dto.response.SessionResponse;
+import com.desyd.api.service.ResultService;
 import com.desyd.api.service.SessionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -18,9 +20,11 @@ import java.util.UUID;
 public class SessionController {
 
     private final SessionService sessionService;
+    private final ResultService resultService;
 
-    public SessionController(SessionService sessionService) {
+    public SessionController(SessionService sessionService, ResultService resultService) {
         this.sessionService = sessionService;
+        this.resultService = resultService;
     }
 
     @PostMapping("/create")
@@ -63,5 +67,12 @@ public class SessionController {
         UUID userId = (UUID) authentication.getPrincipal();
         List<SessionResponse> sessions = sessionService.getUserSessions(userId);
         return ResponseEntity.ok(sessions);
+    }
+
+    @GetMapping("/{sessionId}/results")
+    public ResponseEntity<ResultResponse> getResults(@PathVariable UUID sessionId, Authentication authentication) {
+        UUID userId = (UUID) authentication.getPrincipal();
+        ResultResponse response = resultService.getResults(sessionId);
+        return ResponseEntity.ok(response);
     }
 }

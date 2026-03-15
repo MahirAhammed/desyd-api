@@ -31,14 +31,16 @@ public class SessionService {
     private final UserRepository userRepository;
     private final UserProfileRepository userProfileRepository;
     private final SessionCodeGenerator codeGenerator;
+    private final ResultService resultService;
 
-    public SessionService(SessionRepository sessionRepository, SessionOptionRepository sessionOptionRepository, SessionParticipantRepository sessionParticipantRepository, UserRepository userRepository, UserProfileRepository userProfileRepository, SessionCodeGenerator codeGenerator) {
+    public SessionService(SessionRepository sessionRepository, SessionOptionRepository sessionOptionRepository, SessionParticipantRepository sessionParticipantRepository, UserRepository userRepository, UserProfileRepository userProfileRepository, SessionCodeGenerator codeGenerator, ResultService resultService) {
         this.sessionRepository = sessionRepository;
         this.sessionOptionRepository = sessionOptionRepository;
         this.sessionParticipantRepository = sessionParticipantRepository;
         this.userRepository = userRepository;
         this.userProfileRepository = userProfileRepository;
         this.codeGenerator = codeGenerator;
+        this.resultService = resultService;
     }
 
     @Transactional
@@ -120,6 +122,12 @@ public class SessionService {
         session.setStatus(SessionStatus.CLOSED);
         session.setClosedAt(OffsetDateTime.now());
         session = sessionRepository.save(session);
+
+        try {
+            resultService.calculateAndStoreResults(sessionId);
+        } catch (ValidationException e) {
+            logger.warn("Session closed without votes: {}", session.getSessionCode());
+        }
 
         logger.info("Session closed: {}", session.getSessionCode());
         return toSessionResponse(session, userId);
