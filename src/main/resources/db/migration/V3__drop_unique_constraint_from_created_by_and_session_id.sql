@@ -1,2 +1,0 @@
-ALTER TABLE session_options DROP CONSTRAINT session_options_created_by_key;
-ALTER TABLE session_options DROP CONSTRAINT session_options_session_id_key;

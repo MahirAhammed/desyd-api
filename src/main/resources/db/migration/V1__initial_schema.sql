@@ -1,7 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ENUMS
-CREATE TYPE session_category AS ENUM ('FOOD', 'ACTIVITY', 'MOVIE', 'TASK', 'CUSTOM');
+CREATE TYPE session_category AS ENUM ('FOOD', 'ACTIVITY', 'ENTERTAINMENT', 'TRAVEL', 'TASK', 'CUSTOM');
 CREATE TYPE session_status AS ENUM ('ACTIVE','CLOSED', 'ARCHIVED');
 CREATE TYPE vote_mode AS ENUM ('DEFAULT', 'POINTS', 'RANKED', 'VETO');
 
@@ -16,8 +16,6 @@ CREATE TABLE users(
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE UNIQUE INDEX idx_users_email ON users(email);
-
 -- USER PROFILES TABLE
 CREATE TABLE user_profiles(
     user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
@@ -31,12 +29,10 @@ CREATE TABLE user_profiles(
     CONSTRAINT username_format CHECK (username ~ '^[a-zA-Z0-9_]+$')
 );
 
-CREATE UNIQUE INDEX idx_user_profiles_username ON user_profiles(username);
-
 -- SESSIONS TABLE
 CREATE TABLE sessions(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    created_by UUID UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     session_code CHAR(6) UNIQUE NOT NULL,
     title TEXT NOT NULL,
     description TEXT,
@@ -59,7 +55,6 @@ CREATE TABLE sessions(
     )
 );
 
-CREATE UNIQUE INDEX idx_sessions_code ON sessions(session_code);
 CREATE INDEX idx_sessions_creator ON sessions(created_by);
 CREATE INDEX idx_sessions_status ON sessions(status);
 CREATE INDEX idx_sessions_created_at ON sessions(created_at DESC);
@@ -69,8 +64,8 @@ CREATE INDEX idx_sessions_auto_close ON sessions(created_at, duration)
 -- SESSION OPTIONS TABLE
 CREATE TABLE session_options(
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    session_id UUID UNIQUE NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
-    created_by UUID UNIQUE NOT NULL REFERENCES users(id) ON DELETE SET NULL,
+    session_id UUID NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
+    created_by UUID NOT NULL REFERENCES users(id) ON DELETE SET NULL,
     option_text TEXT NOT NULL,
     metadata JSONB,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -114,7 +109,7 @@ CREATE INDEX idx_votes_session_user ON votes(session_id, user_id);
 CREATE TABLE session_results (
     session_id UUID PRIMARY KEY NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
     winner_option_id UUID REFERENCES session_options(id) ON DELETE SET NULL,
-    winner_option_text VARCHAR(255) NOT NULL,
+    winner_option_text TEXT NOT NULL,
     winner_score INTEGER NOT NULL,
     full_results JSONB NOT NULL,
     total_votes_cast INTEGER NOT NULL,
