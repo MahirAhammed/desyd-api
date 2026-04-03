@@ -237,6 +237,8 @@ public class ResultService {
             SessionResult sessionResult = sessionResultRepository.findBySessionId(session.getId())
                     .orElse(new SessionResult());
 
+            sessionResult.setSession(session);
+
             if (results.getWinnerOptionId() != null) {
                 sessionOptionRepository.findById(results.getWinnerOptionId())
                         .ifPresent(sessionResult::setWinnerOption);
