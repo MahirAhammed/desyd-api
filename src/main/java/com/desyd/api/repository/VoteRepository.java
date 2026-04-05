@@ -12,5 +12,6 @@ public interface VoteRepository extends JpaRepository<Vote, UUID> {
 
     List<Vote> findBySessionId(UUID sessionId);
     List<Vote> findBySessionIdAndUserId(UUID sessionId, UUID userId);
+    long countBySessionId(UUID sessionId);
     void deleteBySessionIdAndUserId(UUID sessionId, UUID userId);
 }

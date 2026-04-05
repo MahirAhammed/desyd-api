@@ -32,8 +32,9 @@ public class SessionService {
     private final UserProfileRepository userProfileRepository;
     private final SessionCodeGenerator codeGenerator;
     private final ResultService resultService;
+    private final VoteRepository voteRepository;
 
-    public SessionService(SessionRepository sessionRepository, SessionOptionRepository sessionOptionRepository, SessionParticipantRepository sessionParticipantRepository, UserRepository userRepository, UserProfileRepository userProfileRepository, SessionCodeGenerator codeGenerator, ResultService resultService) {
+    public SessionService(SessionRepository sessionRepository, SessionOptionRepository sessionOptionRepository, SessionParticipantRepository sessionParticipantRepository, UserRepository userRepository, UserProfileRepository userProfileRepository, SessionCodeGenerator codeGenerator, ResultService resultService, VoteRepository voteRepository) {
         this.sessionRepository = sessionRepository;
         this.sessionOptionRepository = sessionOptionRepository;
         this.sessionParticipantRepository = sessionParticipantRepository;
@@ -41,6 +42,7 @@ public class SessionService {
         this.userProfileRepository = userProfileRepository;
         this.codeGenerator = codeGenerator;
         this.resultService = resultService;
+        this.voteRepository = voteRepository;
     }
 
     @Transactional
@@ -119,15 +121,20 @@ public class SessionService {
             throw new ValidationException("Session is already closed", "SESSION_ALREADY_CLOSED");
         }
 
+        long voteCount = voteRepository.countBySessionId(sessionId);
+        if (voteCount == 0) {
+            sessionRepository.delete(session);
+            logger.info("Session deleted due to no votes: {}", session.getSessionCode());
+            throw new ValidationException(
+                    "Session had no votes and was deleted",
+                    "SESSION_DELETED_NO_VOTES"
+            );
+        }
         session.setStatus(SessionStatus.CLOSED);
         session.setClosedAt(OffsetDateTime.now());
         session = sessionRepository.save(session);
 
-        try {
-            resultService.calculateAndStoreResults(sessionId);
-        } catch (ValidationException e) {
-            logger.warn("Session closed without votes: {}", session.getSessionCode());
-        }
+        resultService.calculateAndStoreResults(sessionId);
 
         logger.info("Session closed: {}", session.getSessionCode());
         return toSessionResponse(session, userId);
