@@ -216,6 +216,7 @@ public class ResultService {
         // Participation stats
         int totalParticipants = sessionParticipantRepository.countBySessionId(session.getId());
         response.setTotalParticipants(totalParticipants);
+        response.setTotalVotes(totalVotes);
 
         // Winner information
         if (!optionResults.isEmpty()) {
