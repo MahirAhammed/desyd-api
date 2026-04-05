@@ -41,7 +41,7 @@ public class SessionController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{sessionCode}")
+    @GetMapping("/code/{sessionCode}")
     public ResponseEntity<SessionResponse> getSession(@PathVariable String sessionCode, Authentication authentication) {
         UUID userId = (UUID) authentication.getPrincipal();
         SessionResponse response = sessionService.getSessionByCode(sessionCode, userId);
