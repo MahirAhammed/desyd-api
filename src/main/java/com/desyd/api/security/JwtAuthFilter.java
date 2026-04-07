@@ -1,10 +1,13 @@
 package com.desyd.api.security;
 
+import com.desyd.api.exception.UnauthorizedException;
 import com.desyd.api.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -19,10 +22,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserRepository repository;
+    private final ObjectMapper objectMapper;
 
-    public JwtAuthFilter(JwtUtil jwtUtil, UserRepository repository) {
+    public JwtAuthFilter(JwtUtil jwtUtil, UserRepository repository, ObjectMapper objectMapper) {
         this.jwtUtil = jwtUtil;
         this.repository = repository;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -34,22 +39,25 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             String jwt = extractJwtFromRequest(request);
 
-            if (jwt != null && !jwtUtil.isTokenExpired(jwt)) {
+            if (jwt != null) {
                 UUID userId = jwtUtil.extractUserId(jwt);
 
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                    // Verify user exists and is active
-                    repository.findById(userId).ifPresent(user -> {
-                        if (user.getActive() && jwtUtil.validateToken(jwt, userId)) {
-                            UsernamePasswordAuthenticationToken authentication =
-                                    new UsernamePasswordAuthenticationToken(
-                                            userId,
-                                            null,
-                                            new ArrayList<>()
-                                    );
-                            SecurityContextHolder.getContext().setAuthentication(authentication);
-                        }
-                    });
+                    boolean authenticated = repository.findById(userId)
+                            .map(user -> user.getActive() && jwtUtil.validateToken(jwt, userId))
+                            .orElse(false);
+
+                    if (authenticated) {
+                        UsernamePasswordAuthenticationToken authentication =
+                                new UsernamePasswordAuthenticationToken(userId, null, new ArrayList<>());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    } else {
+                        // Token was present but invalid
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                        response.getWriter().write(objectMapper.writeValueAsString(new UnauthorizedException("Invalid or expired token")));
+                        return;
+                    }
                 }
             }
         } catch (Exception e) {
