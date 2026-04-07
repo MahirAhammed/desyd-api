@@ -1,8 +1,6 @@
 package com.desyd.api.security;
 
-import com.desyd.api.exception.UnauthorizedException;
 import com.desyd.api.repository.UserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,12 +20,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserRepository repository;
-    private final ObjectMapper objectMapper;
 
-    public JwtAuthFilter(JwtUtil jwtUtil, UserRepository repository, ObjectMapper objectMapper) {
+    public JwtAuthFilter(JwtUtil jwtUtil, UserRepository repository) {
         this.jwtUtil = jwtUtil;
         this.repository = repository;
-        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -55,7 +51,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         // Token was present but invalid
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                        response.getWriter().write(objectMapper.writeValueAsString(new UnauthorizedException("Invalid or expired token")));
+                        response.getWriter().write("Invalid or expired token");
                         return;
                     }
                 }
