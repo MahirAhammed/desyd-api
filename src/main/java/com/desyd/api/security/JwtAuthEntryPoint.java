@@ -1,7 +1,5 @@
 package com.desyd.api.security;
 
-import com.desyd.api.dto.response.ErrorResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,11 +12,7 @@ import java.io.IOException;
 @Component
 public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
 
-    private final ObjectMapper objectMapper;
-
-    public JwtAuthEntryPoint(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
+    public JwtAuthEntryPoint() {}
 
     @Override
     public void commence(
@@ -28,12 +22,6 @@ public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
-        ErrorResponse errorResponse = new ErrorResponse(
-                "AUTHENTICATION_REQUIRED",
-                "Authentication required to access this resource"
-        );
-
-        response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
+        response.getWriter().write("Authentication required to access this resource");
     }
 }
